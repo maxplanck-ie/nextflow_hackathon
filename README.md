@@ -56,6 +56,62 @@ nextflow run nf-core/nanoseq -profile test,singularity
 nextflow run ~/.nextflow/assets/epi2me-labs/wf-alignment  --bam data/bam --references /data/repository/organisms/dm6_flybase_r6.12/genome_fasta -with-singularity ontresearch/wf-alignment -without-docker
 ```
 
+## Deep22 specific fixes
+
+```bash
+APPTAINER_DISABLE_CACHE=true
+```
+
+For epi2me workflows spaces had to be purged from the genome.fa.
+
+## Include another 'process'
+
+Including another process into the wf-alignment workflow.
+
+```bash
+process flagstat_extra {
+    label "wfalignment"
+    cpus 2
+    input:
+        tuple val(meta), path(bam), path(index)
+    output:
+        path "*.readstats_extra.tsv", emit: flagstats_extraout
+    script:
+        def sample_name = meta["alias"]
+    """
+    samtools flagstat $bam > ${sample_name}.readstats_extra.tsv
+    """
+}
+```
+
+and under workflow pipeline
+
+```bash
+// get flagstat extra
+statsextra = flagstat_extra(bam)
+
+//under emit
+flagstats_extraout = statsextra.flagstats_extraout
+```
+
+The changed forked repo is available under
+
+https://github.com/WardDeb/wf-alignment
+
+## Send an email upon completion of the pipeline
+
+```bash
+workflow.onComplete {
+    Pinguscript.ping_complete(nextflow, workflow, params)
+    sendMail(
+        to: 'myemail@hellothere.nl',
+        subject: 'GREEN LIGHT',
+        body: 'BONJOUR TOUT LE MONDE!',
+        attachment: 'output/wf-alignment-report.html'
+)
+}
+```
+
 
 ## References:
 - https://nextflow.io/
