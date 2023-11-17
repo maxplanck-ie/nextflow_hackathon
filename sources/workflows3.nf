@@ -7,7 +7,8 @@ process GENERIC {
     tag 'generic workflow'
     debug true
     container 'docker://ubuntu:20.04' // requires nextflow.config --> singularity.enabled = true
-    publishDir 'results_dir', mode: 'copy', pattern: '*.txt'
+    publishDir 'results_dir', pattern: '*.txt'
+    //publishDir 'results_dir', mode: 'copy', pattern: '*.txt'
     cpus 2
 
 
@@ -15,12 +16,12 @@ process GENERIC {
     val x
 
     output:
-    path 'myfile_${x}.txt'
+    path "myfile_${x}.txt"
 
     script:
     """
     echo Process \$\$ gets $x with $task.cpus CPUs > myfile_${x}.txt
-    cat /etc/os-release >> myfile.txt
+    cat /etc/os-release >> myfile_${x}.txt
     """
 }
 
