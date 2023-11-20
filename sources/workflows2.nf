@@ -1,6 +1,6 @@
 // workflows: combining multiple channels
 
-ch1 = Channel.of(1,2,3)    // try also  Channel.value(1)  
+ch1 = Channel.of(1,2,3)    // try also  Channel.value(1)
 ch2 = Channel.of('a','b','c','d')   
 
 process SILLY {
@@ -10,7 +10,7 @@ process SILLY {
 
     script:
     """
-    echo Process \$\$ gets $x and $y 
+    echo Process \$\$ gets $x and $y > myfile.txt
     """
 }
 

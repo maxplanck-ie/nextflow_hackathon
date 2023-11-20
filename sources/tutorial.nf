@@ -20,8 +20,6 @@ process convertToUpper {
     """
     echo "String Manipulation:"
     cat $x | tr '[a-z]' '[A-Z]' | rev 
-    echo "\nos-release:"
-    cat /etc/os-release
     """
 }
 

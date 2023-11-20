@@ -7,7 +7,7 @@ process GENERIC {
     tag 'generic workflow'
     debug true
     container 'docker://ubuntu:20.04' // requires nextflow.config --> singularity.enabled = true
-    publishDir 'results_dir', pattern: '*.txt'
+    publishDir 'results_dir', pattern: '*.txt'                 // this will generate softlinks
     //publishDir 'results_dir', mode: 'copy', pattern: '*.txt'
     cpus 2
 
@@ -26,5 +26,5 @@ process GENERIC {
 }
 
 workflow {
-  ch | GENERIC 
+  ch | GENERIC
 }
