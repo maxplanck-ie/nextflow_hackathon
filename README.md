@@ -64,6 +64,12 @@ APPTAINER_DISABLE_CACHE=true
 
 For epi2me workflows spaces had to be purged from the genome.fa.
 
+## Group 1 solution summary
+```bash
+APPTAINER_DISABLE_CACHE=true
+nextflow run epi2me-labs/wf-alignment  --bam data/bam --references data/genome -profile singularity
+```
+
 ## Include another 'process'
 
 Including another process into the wf-alignment workflow.
@@ -113,6 +119,49 @@ workflow.onComplete {
 ```
 
 
+## Group 2 solution summary
+
+### without slurm
+1. prepare data directory: rna_data/fast5/
+2. link reference files: genome.fa, genome.fa.fai, genes.gtf
+3. prepare config with singularity enabled and sufficient memory: group2/nextflow.config
+4. prepare parameter file with nf-core launch (avoid long command lines --params.): group2/nf-params.json
+5. postprocess nf-params.json for some futher adjustment (e.g. "skip_multiplexing": true")
+6. run
+
+```bash
+module load nextflow/23.10.0
+nextflow run nf-core/nanoseq -r 3.1.0 -profile singularity -params-file nf-params.json  -resume
+```
+
+Conclusion: very slow run even for the small data set.
+Retrospective: the m6anet part of the workflow failed (after >5h!)
+
+### with slurm
+1. update to include "slurm" profile definition: group2/nextflow.slurm.config
+2. run (on a node with qsub permissions)
+
+```bash
+module load nextflow/23.10.0
+module load slurm
+nextflow run nf-core/nanoseq -r 3.1.0 -profile slurm -params-file nf-params.json -resume
+```
+
+- if singularity images do not already exist at work/singularity, then nextflow will try to pull them with "singularity pull". This will fail on all nodes that don't have singularity installed.
+
+
+### with conda/mamba
+
+```bash
+module load nextflow/23.10.0
+module load slurm
+nextflow run nf-core/nanoseq -r 3.1.0 -profile slurm,mamba -params-file nf-params.json -c nextflow.mamba.config -resume
+```
+
+- failed because certain idependency requirements could not be resolved by mamba/conda (e.g nanoplot, samtools, ncurses, ...)
+
+
+
 ## References:
 - https://nextflow.io/
 - https://training.nextflow.io/basic_training/
@@ -121,6 +170,5 @@ workflow.onComplete {
 
 - https://github.com/epi2me-labs/wf-alignment
 - https://hub.docker.com/r/ontresearch/wf-alignment
-- 
 - https://nf-co.re/nanoseq/3.1.0
 

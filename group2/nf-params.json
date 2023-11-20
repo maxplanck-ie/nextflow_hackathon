@@ -1,0 +1,14 @@
+{
+    "input": "samplesheet.csv",
+    "protocol": "directRNA",
+    "outdir": "RNAout",
+    "email": "manke@ie-freiburg.mpg.de",
+    "multiqc_title": "First trial",
+    "skip_demultiplexing": true,
+    "skip_quantification": true,
+    "skip_differential_analysis": true,
+    "skip_fusion_analysis": true,
+    "skip_xpore": true,
+    "skip_bigbed": true,
+    "skip_bigwig": true
+}

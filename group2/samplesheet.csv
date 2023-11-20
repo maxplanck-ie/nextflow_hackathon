@@ -1,0 +1,2 @@
+group,replicate,barcode,input_file,fasta,gtf
+SAM,1,,rna_data,genome.fa,genes.gtf
