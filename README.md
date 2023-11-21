@@ -47,14 +47,28 @@ exchange workflows, test runs & final discussion
 
 ```bash
 module load nextflow/23.10.0 
+
+# vanilla
+nextflow run sources/workflows3.nf
+
+# switch on debugging (for all processes)
+nextflow run sources/workflows3.nf -process.debug
+
+# show status for each task - rather than proces summary (defautl: -ansi-log true)
+nextflow run sources/workflows3.nf  -ansi-log false
+
+# use with a specific singularity/apptained 
 nextflow run -with-apptainer docker://ubuntu:20.04 sources/tutorial.nf 
 
-# test runs without modification calling
+# test runs *without* modification calling
 nextflow run nf-core/nanoseq -profile test,singularity
 
 # couldn't get to work
 nextflow run ~/.nextflow/assets/epi2me-labs/wf-alignment  --bam data/bam --references /data/repository/organisms/dm6_flybase_r6.12/genome_fasta -with-singularity ontresearch/wf-alignment -without-docker
 ```
+Retrospective correction: better specify -profile singularity as defined in nextflow.config (see group1 below)
+
+
 
 ## Deep22 specific fixes
 
