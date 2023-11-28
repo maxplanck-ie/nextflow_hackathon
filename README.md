@@ -162,7 +162,7 @@ nextflow run nf-core/nanoseq -r 3.1.0 -profile slurm -params-file nf-params.json
 ```
 
 - if singularity images do not already exist at work/singularity, then nextflow will try to pull them with "singularity pull". This will fail on all nodes that don't have singularity installed.
-
+- one possible solution is to pull down the repo and the singularity containers using nf-core (https://nf-co.re/tools#downloading-pipelines-for-offline-use), then we can execute the pipeline with slurm and singularity (not helpful as only 1 node can use singularity)
 
 ### with conda/mamba
 
@@ -173,7 +173,7 @@ nextflow run nf-core/nanoseq -r 3.1.0 -profile slurm,mamba -params-file nf-param
 ```
 
 - failed because certain idependency requirements could not be resolved by mamba/conda (e.g nanoplot, samtools, ncurses, ...)
-
+- this would require to prepare a functional conda environment
 
 
 ## References:
